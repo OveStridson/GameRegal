@@ -1733,6 +1733,7 @@ function openWiz(){
   ws=1;
   Object.assign(wd,{title:'',emoji:'🎮',steamId:null,coverUrl:'',coverMode:'steam',status:'backlog',progress:0,hours:0,notes:''});
   ['wTitleInp','covUrlInp','customEm'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
+  document.getElementById('covUrlInp').placeholder='https://…';
   ['wProg','wHrs'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='0'});
   document.getElementById('wNts').value='';
   closeAc();
@@ -1779,7 +1780,9 @@ document.getElementById('wNext').onclick=()=>{
     wd.genre=document.getElementById('wGenre').value;
     ws++;updateWiz();
   } else if(ws===2){
-    if(wd.coverMode==='url') wd.coverUrl=document.getElementById('covUrlInp').value.trim();
+    // Only take the URL field if it has a value — an extracted cover (data URL)
+    // leaves the field empty on purpose and must not be wiped here.
+    if(wd.coverMode==='url'){const u=document.getElementById('covUrlInp').value.trim();if(u)wd.coverUrl=u}
     if(wd.coverMode==='emoji'){const ce=document.getElementById('customEm').value;if(ce)wd.emoji=ce}
     ws++;updateWiz();
   } else if(ws===3){

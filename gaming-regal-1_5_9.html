@@ -2360,16 +2360,17 @@ function initEmojiGrid(){
 /* ── AUTOCOMPLETE (PC: CheapShark · Konsolen: Wikidata) ── */
 let acT=null, acIdx=-1, acSeq=0;
 
-// Wikidata-Q-IDs: per wbsearchentities ermittelt, per curl gegengeprüft.
+// Wikidata-Q-IDs: per wbgetentities (enwiki-Titel) bzw. wbsearchentities ermittelt,
+// per curl gegengeprüft (jede ID hat Spiele mit P31=Q7889 + P400=ID). Stand 2026-10-22.
 const WD_VIDEO_GAME='Q7889';
 const PLATFORM_QIDS={
-  switch2:'',switch:'',ps5:'',xboxSeries:'',ps4:'',xboxOne:'',
-  nes:'',snes:'',n64:'',gamecube:'',wii:'',wiiu:'',
-  gb:'',gbc:'',gba:'',ds:'',n3ds:'',
-  ps1:'',ps2:'',ps3:'',psp:'',vita:'',
-  xbox:'',xbox360:'',
-  sms:'',megadrive:'',saturn:'',dreamcast:'',gamegear:'',
-  atari2600:'',pcengine:'',neogeo:''
+  switch2:'Q122761124',switch:'Q19610114',ps5:'Q63184502',xboxSeries:'Q98973368',ps4:'Q5014725',xboxOne:'Q13361286',
+  nes:'Q172742',snes:'Q183259',n64:'Q184839',gamecube:'Q182172',wii:'Q8079',wiiu:'Q56942',
+  gb:'Q186437',gbc:'Q203992',gba:'Q188642',ds:'Q170323',n3ds:'Q203597',
+  ps1:'Q10677',ps2:'Q10680',ps3:'Q10683',psp:'Q170325',vita:'Q188808',
+  xbox:'Q132020',xbox360:'Q48263',
+  sms:'Q209868',megadrive:'Q10676',saturn:'Q200912',dreamcast:'Q184198',gamegear:'Q751719',
+  atari2600:'Q206261',pcengine:'Q1057377',neogeo:'Q1054350'
 };
 // short = Anzeige in der Trefferliste, opt = Wert in #wPlat (falls vorhanden)
 const PLATFORM_INFO={

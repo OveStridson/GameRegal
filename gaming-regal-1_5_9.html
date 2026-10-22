@@ -2464,12 +2464,13 @@ async function acWikidata(q,keys){
   if(!sr.ok) throw new Error('Wikidata '+sr.status);
   const ids=((await sr.json()).query?.search||[]).map(h=>h.title);
   if(!ids.length) return [];
-  const er=await fetch(`${WD_API}&action=wbgetentities&props=labels|claims&languages=de|en&ids=${ids.join('|')}`);
+  const er=await fetch(`${WD_API}&action=wbgetentities&props=labels|claims&languages=de|en|mul&ids=${ids.join('|')}`);
   if(!er.ok) throw new Error('Wikidata '+er.status);
   const ents=(await er.json()).entities||{};
   return ids.map(id=>{
     const en=ents[id];
-    const name=en?.labels?.de?.value||en?.labels?.en?.value;
+    // Viele Einträge tragen ihren Namen nur noch als sprachübergreifendes "mul"-Label
+    const name=en?.labels?.de?.value||en?.labels?.en?.value||en?.labels?.mul?.value;
     if(!name) return null;
     const plats=(en.claims?.P400||[]).map(c=>c.mainsnak?.datavalue?.value?.id);
     // Mehrere passende Plattformen: Reihenfolge in keys entscheidet (Switch 2 vor Switch)

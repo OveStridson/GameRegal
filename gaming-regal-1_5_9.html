@@ -290,6 +290,9 @@ button{cursor:pointer;background:none;border:none}
 .ac-meta{font-size:var(--text-xs);color:var(--txm);margin-top:2px}
 .ac-src{font-size:10px;color:var(--txf);background:var(--sdyn);padding:1px 6px;border-radius:var(--r-full);display:inline-block;margin-top:2px}
 .ac-lo{padding:var(--sp4);text-align:center;font-size:var(--text-sm);color:var(--txf)}
+.ac-opts{display:flex;gap:var(--sp2);flex-wrap:wrap;margin-bottom:var(--sp3)}
+.ac-chk{display:flex;align-items:center;gap:var(--sp2);margin-bottom:var(--sp3);font-size:var(--text-sm);color:var(--txm);cursor:pointer}
+.ac-chk input{width:16px;height:16px;accent-color:var(--pr)}
 .lang-toggle{display:flex;gap:var(--sp2)}
 .lang-opt{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 10px;border-radius:var(--r-lg);border:1px solid var(--brd);background:var(--su);color:var(--txm);font-size:var(--text-sm);font-weight:600;cursor:pointer;transition:all var(--ease)}
 .lang-opt:hover{border-color:var(--pr)}
@@ -613,6 +616,9 @@ button{cursor:pointer;background:none;border:none}
           <option value="PlayStation 5">🎮 PS5</option>
           <option value="Xbox Series X">🟩 Xbox Series</option>
           <option value="Nintendo Switch 2">🔴 Switch 2</option>
+          <option value="Nintendo Switch">🔴 Switch</option>
+          <option value="PlayStation 4">🎮 PS4</option>
+          <option value="Xbox One">🟩 Xbox One</option>
           <option value="Mobile">📱 Mobile</option>
           <option value="Cloud">☁️ Cloud</option>
           <option value="Retro">🕹 Retro</option>
@@ -670,7 +676,7 @@ button{cursor:pointer;background:none;border:none}
         <div class="sec-h" data-i18n="d_plat_details">Plattform & Details</div>
         <div style="display:flex;gap:var(--sp3);flex-wrap:wrap;align-items:center">
           <select class="sel-inp" id="dPlatSel" style="flex:1;min-width:140px;font-size:var(--text-xs);padding:6px 10px">
-            <option value="PC" data-i18n-opt="plat_pc">PC</option><option value="Mac" data-i18n-opt="plat_mac">Mac</option><option value="SteamOS" data-i18n-opt="plat_steamos">SteamOS</option><option value="PlayStation 5" data-i18n-opt="plat_ps5">PlayStation 5</option><option value="Xbox Series X" data-i18n-opt="plat_xbox">Xbox Series X</option><option value="Nintendo Switch 2" data-i18n-opt="plat_switch">Nintendo Switch 2</option><option value="Mobile" data-i18n-opt="plat_mobile">Mobile</option><option value="Cloud" data-i18n-opt="plat_cloud">Cloud</option><option value="Retro" data-i18n-opt="plat_retro">Retro</option><option value="Andere" data-i18n-opt="plat_other">Andere</option>
+            <option value="PC" data-i18n-opt="plat_pc">PC</option><option value="Mac" data-i18n-opt="plat_mac">Mac</option><option value="SteamOS" data-i18n-opt="plat_steamos">SteamOS</option><option value="PlayStation 5" data-i18n-opt="plat_ps5">PlayStation 5</option><option value="Xbox Series X" data-i18n-opt="plat_xbox">Xbox Series X</option><option value="Nintendo Switch 2" data-i18n-opt="plat_switch">Nintendo Switch 2</option><option value="Nintendo Switch" data-i18n-opt="plat_switch1">Nintendo Switch</option><option value="PlayStation 4" data-i18n-opt="plat_ps4">PlayStation 4</option><option value="Xbox One" data-i18n-opt="plat_xboxone">Xbox One</option><option value="Mobile" data-i18n-opt="plat_mobile">Mobile</option><option value="Cloud" data-i18n-opt="plat_cloud">Cloud</option><option value="Retro" data-i18n-opt="plat_retro">Retro</option><option value="Andere" data-i18n-opt="plat_other">Andere</option>
           </select>
           <input class="inp" id="dYearInp" type="number" min="1970" max="2030" placeholder="Jahr" data-i18n-ph="d_year_ph" style="width:80px;font-size:var(--text-xs);padding:6px 10px">
         </div>
@@ -814,6 +820,10 @@ button{cursor:pointer;background:none;border:none}
       <div class="sico">🔍</div>
       <div><div class="sttl" data-i18n="w_s1_ttl">Welches Spiel?</div><div class="ssub" data-i18n="w_s1_sub">Titel eingeben — Cover & Infos werden automatisch gefunden</div></div>
       <div class="ac-w">
+        <div class="ac-opts" id="wLgChips" style="display:none">
+          <button type="button" class="pill on" data-lg="switch" data-i18n="plat_switch1">Switch</button><button type="button" class="pill" data-lg="ps4" data-i18n="plat_ps4">PS4</button><button type="button" class="pill" data-lg="xboxOne" data-i18n="plat_xboxone">Xbox One</button>
+        </div>
+        <label class="ac-chk" id="wSw1Row" style="display:none"><input type="checkbox" id="wSw1"><span data-i18n="w_sw1">Switch-1-Titel anzeigen</span></label>
         <div class="fl"><label class="lbl" for="wTitleInp" data-i18n="w_title_lbl">Spieltitel *</label>
           <input class="inp" id="wTitleInp" type="text" placeholder="z.B. Elden Ring, Slay the Spire…" data-i18n-ph="w_title_ph" autocomplete="off"></div>
         <div class="ac-dd" id="acDd"></div>
@@ -821,7 +831,7 @@ button{cursor:pointer;background:none;border:none}
       <div class="inp-row">
         <div class="fl"><label class="lbl" for="wPlat" data-i18n="w_platform">Plattform</label>
           <select class="sel-inp" id="wPlat">
-            <option value="PC" data-i18n-opt="plat_pc">PC</option><option value="Mac" data-i18n-opt="plat_mac">Mac</option><option value="SteamOS" data-i18n-opt="plat_steamos">SteamOS</option><option value="PlayStation 5" data-i18n-opt="plat_ps5">PlayStation 5</option><option value="Xbox Series X" data-i18n-opt="plat_xbox">Xbox Series X</option><option value="Nintendo Switch 2" data-i18n-opt="plat_switch">Nintendo Switch 2</option><option value="Mobile" data-i18n-opt="plat_mobile">Mobile</option><option value="Cloud" data-i18n-opt="plat_cloud">Cloud</option><option value="Retro" data-i18n-opt="plat_retro">Retro</option><option value="Andere" data-i18n-opt="plat_other">Andere</option>
+            <option value="PC" data-i18n-opt="plat_pc">PC</option><option value="Mac" data-i18n-opt="plat_mac">Mac</option><option value="SteamOS" data-i18n-opt="plat_steamos">SteamOS</option><option value="PlayStation 5" data-i18n-opt="plat_ps5">PlayStation 5</option><option value="Xbox Series X" data-i18n-opt="plat_xbox">Xbox Series X</option><option value="Nintendo Switch 2" data-i18n-opt="plat_switch">Nintendo Switch 2</option><option value="Nintendo Switch" data-i18n-opt="plat_switch1">Nintendo Switch</option><option value="PlayStation 4" data-i18n-opt="plat_ps4">PlayStation 4</option><option value="Xbox One" data-i18n-opt="plat_xboxone">Xbox One</option><option value="Mobile" data-i18n-opt="plat_mobile">Mobile</option><option value="Cloud" data-i18n-opt="plat_cloud">Cloud</option><option value="Retro" data-i18n-opt="plat_retro">Retro</option><option value="Andere" data-i18n-opt="plat_other">Andere</option>
           </select></div>
         <div class="fl"><label class="lbl" for="wGenre" data-i18n="w_genre">Genre</label>
           <select class="sel-inp" id="wGenre">
@@ -992,6 +1002,7 @@ const I18N={
     stat_games:'Spiele',stat_active:'Aktiv',stat_done:'Fertig',stat_hours:'Stunden',
     pill_all:'Alle',pill_playing:'Aktiv',pill_completed:'Fertig',pill_backlog:'Backlog',pill_wishlist:'Wunsch',pill_dropped:'Abgebrochen',
     sum_steam:'Steam Cover ✓',sum_url:'Eigene URL ✓',sum_grad:'Farbverlauf',
+    w_sw1:'Switch-1-Titel anzeigen',
     ac_loading:'Suche läuft…',ac_offline:'Kein Internet oder API nicht erreichbar.<br>Titel manuell eingeben und Enter drücken.',ac_none:'Nichts gefunden. Titel manuell eingeben und Enter drücken.',
     d_status:'Status',d_progress:'Fortschritt',d_platform:'Plattform',d_year:'Jahr',d_hours:'Stunden gespielt',d_rating:'Bewertung',d_notes:'Notizen',d_cover:'Cover',
     d_plat_details:'Plattform & Details',d_year_ph:'Jahr',d_cover_change:'Cover\nändern',d_cover_change_t:'Cover ändern',d_notes_ph:'Deine Gedanken…',d_hours_unit:'Stunden',d_pr_done:'Abgeschlossen',
@@ -1003,7 +1014,7 @@ const I18N={
     w_s3_ttl:'Wie ist dein Stand?',w_s3_sub:'Status, Fortschritt und erste Infos',w_prog_lbl:'Fortschritt %',w_hrs_lbl:'Stunden gespielt',w_notes_lbl:'Erste Notizen (optional)',w_notes_ph:'Ersteindruck…',
     w_final_ttl:'Spieltitel',w_next:'Weiter →',w_final_prompt_pre:'Drücke ',w_final_prompt_post:' um das Spiel ins Regal zu stellen! 🎉',
     gen_rpg:'RPG',gen_action:'Action',gen_strategy:'Strategie',gen_roguelike:'Roguelike',gen_shooter:'Shooter',gen_adventure:'Adventure',gen_simulation:'Simulation',gen_other:'Sonstiges',
-    plat_pc:'PC',plat_mac:'Mac',plat_steamos:'SteamOS/Linux',plat_ps5:'PS5',plat_xbox:'Xbox Series',plat_switch:'Switch 2',plat_mobile:'Mobile',plat_cloud:'Cloud',plat_retro:'Retro',plat_other:'Andere',
+    plat_pc:'PC',plat_mac:'Mac',plat_steamos:'SteamOS/Linux',plat_ps5:'PS5',plat_xbox:'Xbox Series',plat_switch:'Switch 2',plat_mobile:'Mobile',plat_cloud:'Cloud',plat_retro:'Retro',plat_other:'Andere',plat_switch1:'Switch',plat_ps4:'PS4',plat_xboxone:'Xbox One',
     st_playing:'Aktiv',st_completed:'Abgeschlossen',st_backlog:'Backlog',st_wishlist:'Wunschliste',st_dropped:'Abgebrochen',
     ex_step1:'Öffne die Google-Bildersuche für dein Spiel, finde ein schönes Cover und mach einen Screenshot davon (am Mac: ⌘⇧4 – landet direkt in der Zwischenablage. Windows: ⊞ Win + Shift + S).',
     ex_search:'🔍 Google-Bildersuche öffnen',ex_next:'Screenshot gemacht → Weiter',
@@ -1029,6 +1040,7 @@ const I18N={
     stat_games:'Games',stat_active:'Playing',stat_done:'Done',stat_hours:'Hours',
     pill_all:'All',pill_playing:'Playing',pill_completed:'Done',pill_backlog:'Backlog',pill_wishlist:'Wishlist',pill_dropped:'Dropped',
     sum_steam:'Steam cover ✓',sum_url:'Custom URL ✓',sum_grad:'Gradient',
+    w_sw1:'Show Switch 1 titles',
     ac_loading:'Searching…',ac_offline:'No internet or API unreachable.<br>Type the title manually and press Enter.',ac_none:'Nothing found. Type the title manually and press Enter.',
     d_status:'Status',d_progress:'Progress',d_platform:'Platform',d_year:'Year',d_hours:'Hours played',d_rating:'Rating',d_notes:'Notes',d_cover:'Cover',
     d_plat_details:'Platform & details',d_year_ph:'Year',d_cover_change:'Change\ncover',d_cover_change_t:'Change cover',d_notes_ph:'Your thoughts…',d_hours_unit:'hours',d_pr_done:'Completed',
@@ -1040,7 +1052,7 @@ const I18N={
     w_s3_ttl:'How far are you?',w_s3_sub:'Status, progress and first details',w_prog_lbl:'Progress %',w_hrs_lbl:'Hours played',w_notes_lbl:'First notes (optional)',w_notes_ph:'First impression…',
     w_final_ttl:'Game title',w_next:'Next →',w_final_prompt_pre:'Press ',w_final_prompt_post:' to put the game on the shelf! 🎉',
     gen_rpg:'RPG',gen_action:'Action',gen_strategy:'Strategy',gen_roguelike:'Roguelike',gen_shooter:'Shooter',gen_adventure:'Adventure',gen_simulation:'Simulation',gen_other:'Other',
-    plat_pc:'PC',plat_mac:'Mac',plat_steamos:'SteamOS/Linux',plat_ps5:'PS5',plat_xbox:'Xbox Series',plat_switch:'Switch 2',plat_mobile:'Mobile',plat_cloud:'Cloud',plat_retro:'Retro',plat_other:'Other',
+    plat_pc:'PC',plat_mac:'Mac',plat_steamos:'SteamOS/Linux',plat_ps5:'PS5',plat_xbox:'Xbox Series',plat_switch:'Switch 2',plat_mobile:'Mobile',plat_cloud:'Cloud',plat_retro:'Retro',plat_other:'Other',plat_switch1:'Switch',plat_ps4:'PS4',plat_xboxone:'Xbox One',
     st_playing:'Playing',st_completed:'Completed',st_backlog:'Backlog',st_wishlist:'Wishlist',st_dropped:'Dropped',
     ex_step1:'Open Google Image Search for your game, find a nice cover and take a screenshot of it (Mac: ⌘⇧4 – goes straight to the clipboard. Windows: ⊞ Win + Shift + S).',
     ex_search:'🔍 Open Google Image Search',ex_next:'Screenshot taken → Next',
@@ -1973,12 +1985,13 @@ let ws=1, wd={title:'',platformId:null,platform:'PC',genre:'RPG',year:null,emoji
 
 function openWiz(){
   ws=1;
-  Object.assign(wd,{title:'',emoji:'🎮',steamId:null,coverUrl:'',coverMode:'steam',status:'backlog',progress:0,hours:0,notes:''});
+  Object.assign(wd,{title:'',year:null,emoji:'🎮',steamId:null,coverUrl:'',coverMode:'steam',status:'backlog',progress:0,hours:0,notes:''});
   ['wTitleInp','covUrlInp','customEm'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
   document.getElementById('covUrlInp').placeholder='https://…';
   ['wProg','wHrs'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='0'});
   document.getElementById('wNts').value='';
   closeAc();
+  setupWizSearch();
   selCovOpt('steam');
   initEmojiGrid();
   buildWizStatus();
@@ -2344,8 +2357,75 @@ function initEmojiGrid(){
   }));
 }
 
-/* ── AUTOCOMPLETE (CheapShark + Steam) ── */
-let acT=null, acIdx=-1;
+/* ── AUTOCOMPLETE (PC: CheapShark · Konsolen: Wikidata) ── */
+let acT=null, acIdx=-1, acSeq=0;
+
+// Wikidata-Q-IDs: per wbsearchentities ermittelt, per curl gegengeprüft.
+const WD_VIDEO_GAME='Q7889';
+const PLATFORM_QIDS={
+  switch2:'',switch:'',ps5:'',xboxSeries:'',ps4:'',xboxOne:'',
+  nes:'',snes:'',n64:'',gamecube:'',wii:'',wiiu:'',
+  gb:'',gbc:'',gba:'',ds:'',n3ds:'',
+  ps1:'',ps2:'',ps3:'',psp:'',vita:'',
+  xbox:'',xbox360:'',
+  sms:'',megadrive:'',saturn:'',dreamcast:'',gamegear:'',
+  atari2600:'',pcengine:'',neogeo:''
+};
+// short = Anzeige in der Trefferliste, opt = Wert in #wPlat (falls vorhanden)
+const PLATFORM_INFO={
+  switch2:{short:'Switch 2',opt:'Nintendo Switch 2'},switch:{short:'Switch',opt:'Nintendo Switch'},
+  ps5:{short:'PS5',opt:'PlayStation 5'},xboxSeries:{short:'Xbox Series',opt:'Xbox Series X'},
+  ps4:{short:'PS4',opt:'PlayStation 4'},xboxOne:{short:'Xbox One',opt:'Xbox One'},
+  nes:{short:'NES'},snes:{short:'SNES'},n64:{short:'N64'},gamecube:{short:'GameCube'},wii:{short:'Wii'},wiiu:{short:'Wii U'},
+  gb:{short:'Game Boy'},gbc:{short:'GBC'},gba:{short:'GBA'},ds:{short:'DS'},n3ds:{short:'3DS'},
+  ps1:{short:'PS1'},ps2:{short:'PS2'},ps3:{short:'PS3'},psp:{short:'PSP'},vita:{short:'PS Vita'},
+  xbox:{short:'Xbox'},xbox360:{short:'Xbox 360'},
+  sms:{short:'Master System'},megadrive:{short:'Mega Drive'},saturn:{short:'Saturn'},dreamcast:{short:'Dreamcast'},gamegear:{short:'Game Gear'},
+  atari2600:{short:'Atari 2600'},pcengine:{short:'PC Engine'},neogeo:{short:'Neo Geo'}
+};
+const RETRO_KEYS=['nes','snes','n64','gamecube','wii','wiiu','gb','gbc','gba','ds','n3ds','ps1','ps2','ps3','psp','vita','xbox','xbox360','sms','megadrive','saturn','dreamcast','gamegear','atari2600','pcengine','neogeo'];
+const TILE_PLAT={pc:'PC',switch2:'Nintendo Switch 2',ps5:'PlayStation 5','xbox-series':'Xbox Series X',retro:'Retro'};
+let wLastGen='switch';
+
+function escHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c])}
+
+// Plattform-Keys für die aktuelle Kachelwahl; null → CheapShark (PC / manuell)
+function wdSearchKeys(){
+  switch(wd.platformId){
+    case 'switch2': return document.getElementById('wSw1').checked?['switch2','switch']:['switch2'];
+    case 'ps5': return ['ps5'];
+    case 'xbox-series': return ['xboxSeries'];
+    case 'lastgen': return [wLastGen];
+    case 'retro': return RETRO_KEYS;
+  }
+  return null;
+}
+
+function setupWizSearch(){
+  const id=wd.platformId;
+  wLastGen='switch';updLgChips();
+  document.getElementById('wSw1').checked=false;
+  document.getElementById('wLgChips').style.display=id==='lastgen'?'':'none';
+  document.getElementById('wSw1Row').style.display=id==='switch2'?'':'none';
+  const plat=id==='lastgen'?PLATFORM_INFO[wLastGen].opt:TILE_PLAT[id];
+  if(plat) document.getElementById('wPlat').value=plat;
+}
+function updLgChips(){
+  document.querySelectorAll('#wLgChips [data-lg]').forEach(b=>b.classList.toggle('on',b.dataset.lg===wLastGen));
+}
+function reSearch(){
+  const q=document.getElementById('wTitleInp').value.trim();
+  clearTimeout(acT);
+  if(q.length>=2) fetchAc(q);
+}
+document.getElementById('wLgChips').addEventListener('click',e=>{
+  const b=e.target.closest('[data-lg]');
+  if(!b) return;
+  wLastGen=b.dataset.lg;updLgChips();
+  document.getElementById('wPlat').value=PLATFORM_INFO[wLastGen].opt;
+  reSearch();
+});
+document.getElementById('wSw1').addEventListener('change',reSearch);
 
 document.getElementById('wTitleInp').addEventListener('input',e=>{
   const q=e.target.value.trim();
@@ -2363,57 +2443,70 @@ document.getElementById('wTitleInp').addEventListener('keydown',e=>{
   else if(e.key==='Escape')closeAc();
 });
 
+async function acSteam(q){
+  const r=await fetch(`https://www.cheapshark.com/api/1.0/games?title=${encodeURIComponent(q)}&limit=8`);
+  const list=r.ok?await r.json():[];
+  const seen=new Set();
+  return list.filter(g=>{
+    const key=(g.external||'').toLowerCase().trim();
+    if(!key||seen.has(key)) return false;
+    seen.add(key);return true;
+  }).map(g=>({name:g.external,sid:g.steamAppID?+g.steamAppID:null,cover:g.steamAppID?steamCover(g.steamAppID):'',src:'Steam'}));
+}
+
+const WD_API='https://www.wikidata.org/w/api.php?format=json&origin=*';
+async function acWikidata(q,keys){
+  const qids=keys.map(k=>PLATFORM_QIDS[k]).filter(Boolean);
+  if(!qids.length) throw new Error('PLATFORM_QIDS leer');
+  const srsearch=`${q} haswbstatement:P31=${WD_VIDEO_GAME} haswbstatement:${qids.map(id=>'P400='+id).join('|')}`;
+  const sr=await fetch(`${WD_API}&action=query&list=search&srlimit=10&srsearch=${encodeURIComponent(srsearch)}`);
+  if(!sr.ok) throw new Error('Wikidata '+sr.status);
+  const ids=((await sr.json()).query?.search||[]).map(h=>h.title);
+  if(!ids.length) return [];
+  const er=await fetch(`${WD_API}&action=wbgetentities&props=labels|claims&languages=de|en&ids=${ids.join('|')}`);
+  if(!er.ok) throw new Error('Wikidata '+er.status);
+  const ents=(await er.json()).entities||{};
+  return ids.map(id=>{
+    const en=ents[id];
+    const name=en?.labels?.de?.value||en?.labels?.en?.value;
+    if(!name) return null;
+    const plats=(en.claims?.P400||[]).map(c=>c.mainsnak?.datavalue?.value?.id);
+    // Mehrere passende Plattformen: Reihenfolge in keys entscheidet (Switch 2 vor Switch)
+    const platKey=keys.find(k=>plats.includes(PLATFORM_QIDS[k]))||null;
+    const years=(en.claims?.P577||[]).map(c=>/^\+?(\d{4})-/.exec(c.mainsnak?.datavalue?.value?.time||'')).filter(Boolean).map(m=>+m[1]);
+    return {name,sid:null,cover:'',src:'Wikidata',platKey,year:years.length?Math.min(...years):null};
+  }).filter(Boolean);
+}
+
 async function fetchAc(q){
   const dd=document.getElementById('acDd');
   dd.innerHTML='<div class="ac-lo">'+t('ac_loading')+'</div>';
   dd.classList.add('open');
   acIdx=-1;
+  const seq=++acSeq;
+  const keys=wdSearchKeys();
 
-  // Two sources in parallel:
-  //  • CheapShark → Steam games (with Steam App IDs)
-  //  • iTunes Search → non-Steam games (Switch/Mobile/PlayStation) with cover art
-  const steamP=fetch(`https://www.cheapshark.com/api/1.0/games?title=${encodeURIComponent(q)}&limit=8`)
-    .then(r=>r.ok?r.json():[]).catch(()=>[]);
-  const otherP=fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(q)}&entity=software&limit=8`)
-    .then(r=>r.ok?r.json():{results:[]}).then(j=>j.results||[]).catch(()=>[]);
-
-  let steam=[],other=[];
-  try{ [steam,other]=await Promise.all([steamP,otherP]); }
+  let items;
+  try{ items=keys?await acWikidata(q,keys):await acSteam(q); }
   catch(err){
-    dd.innerHTML='<div class="ac-lo">'+t('ac_offline')+'</div>';
+    if(seq===acSeq) dd.innerHTML='<div class="ac-lo">'+t('ac_offline')+'</div>';
     return;
   }
-
-  // Normalise both sources into one list. Steam first (most precise for PC games).
-  const seen=new Set();
-  const items=[];
-  steam.forEach(g=>{
-    const key=(g.external||'').toLowerCase().trim();
-    if(!key||seen.has(key)) return;
-    seen.add(key);
-    items.push({name:g.external,sid:g.steamAppID?+g.steamAppID:null,cover:g.steamAppID?steamCover(g.steamAppID):'',src:'Steam'});
-  });
-  other.forEach(g=>{
-    const name=(g.trackName||'').trim();
-    const key=name.toLowerCase();
-    if(!name||seen.has(key)) return;
-    seen.add(key);
-    // artworkUrl100 → request a larger version
-    const art=(g.artworkUrl100||g.artworkUrl60||'').replace(/\/[0-9]+x[0-9]+bb\./,'/600x600bb.');
-    items.push({name,sid:null,cover:art,src:'App Store'});
-  });
+  if(seq!==acSeq) return; // veraltete Antwort (weitergetippt, Chip gewechselt, geschlossen)
 
   if(!items.length){dd.innerHTML='<div class="ac-lo">'+t('ac_none')+'</div>';return}
 
   dd.innerHTML=items.map(it=>{
+    // Wikidata liefert kein Cover – das kommt später aus dem Extraktions-Tool
     const imgHtml=it.cover
       ?`<img class="ac-img" src="${it.cover}" alt="" loading="lazy" onerror="this.style.display='none'">`
-      :`<div class="ac-iph">🎮</div>`;
-    return `<div class="ac-item" data-name="${encodeURIComponent(it.name)}" data-sid="${it.sid||''}" data-cover="${encodeURIComponent(it.cover||'')}" tabindex="-1">
+      :(it.src==='Steam'?`<div class="ac-iph">🎮</div>`:'');
+    const meta=it.sid?`Steam App ${it.sid}`:[it.platKey&&PLATFORM_INFO[it.platKey].short,it.year].filter(Boolean).join(' · ');
+    return `<div class="ac-item" data-name="${encodeURIComponent(it.name)}" data-sid="${it.sid||''}" data-cover="${encodeURIComponent(it.cover||'')}" data-plat="${it.platKey||''}" data-year="${it.year||''}" tabindex="-1">
       ${imgHtml}
       <div class="ac-info">
-        <div class="ac-name">${it.name}</div>
-        ${it.sid?`<div class="ac-meta">Steam App ${it.sid}</div>`:''}
+        <div class="ac-name">${escHtml(it.name)}</div>
+        ${meta?`<div class="ac-meta">${escHtml(meta)}</div>`:''}
         <span class="ac-src">${it.src}</span>
       </div>
     </div>`;
@@ -2427,13 +2520,20 @@ function pickGame(el){
   const cover=el.dataset.cover?decodeURIComponent(el.dataset.cover):'';
   document.getElementById('wTitleInp').value=name;
   wd.title=name;wd.steamId=sid;
+  wd.year=el.dataset.year?+el.dataset.year:null;
+  if(wd.platformId==='retro'){
+    // Plattform des Treffers übernehmen, wenn es sie im Dropdown gibt – sonst "Retro"
+    const sel=document.getElementById('wPlat');
+    const opt=PLATFORM_INFO[el.dataset.plat]?.opt;
+    sel.value=opt&&[...sel.options].some(o=>o.value===opt)?opt:'Retro';
+  }
   if(sid){
     // Steam game → use Steam cover
     wd.coverUrl='';
     selCovOpt('steam');
     setSteamAlts(sid);
   } else if(cover){
-    // Non-Steam game (Switch/Mobile/PlayStation) → use fetched cover URL
+    // Non-Steam game with a fetched cover URL
     wd.coverUrl=cover;
     document.getElementById('covUrlInp').value=cover;
     document.getElementById('steamAlts').style.display='none';
@@ -2449,7 +2549,7 @@ function pickGame(el){
 
 function closeAc(){
   const dd=document.getElementById('acDd');
-  dd.classList.remove('open');dd.innerHTML='';acIdx=-1;
+  dd.classList.remove('open');dd.innerHTML='';acIdx=-1;acSeq++;
 }
 document.addEventListener('click',e=>{if(!e.target.closest('.ac-w'))closeAc()});
 

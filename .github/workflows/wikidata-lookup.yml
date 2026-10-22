@@ -1,4 +1,4 @@
-# Temporär: Suchanfragen der App gegen Wikidata testen.
+# Temporär: Label-Sprachen prüfen.
 name: wikidata-lookup
 on:
   push:
@@ -7,15 +7,13 @@ jobs:
   lookup:
     runs-on: ubuntu-latest
     steps:
-      - name: App-Queries
+      - name: Labels
         shell: bash
         run: |
-          API='https://www.wikidata.org/w/api.php?format=json&origin=*'
           UA='GameRegal-dev/0.1 (https://github.com/OveStridson/GameRegal)'
-          t(){ echo "-- $1"; ids=$(curl -sS -G "$API" -A "$UA" --data-urlencode action=query --data-urlencode list=search --data-urlencode srlimit=10 --data-urlencode "srsearch=$1" -D /tmp/h | jq -r '[.query.searchinfo.totalhits|tostring] + [.query.search[].title] | join(" ")'); grep -i access-control-allow-origin /tmp/h || echo "kein CORS-Header"; echo "hits+ids: $ids"; set -- $ids; shift; [ $# -gt 0 ] && curl -sS -G "$API" -A "$UA" --data-urlencode action=wbgetentities --data-urlencode props='labels|claims' --data-urlencode languages='de|en' --data-urlencode "ids=$(IFS='|'; echo "$*")" | jq -r '.entities[] | "   \(.id) | \(.labels.de.value // .labels.en.value) | P577=\([.claims.P577[]?.mainsnak.datavalue.value.time] | join(",")) | P400=\([.claims.P400[]?.mainsnak.datavalue.value.id] | join(","))"'; sleep 0.5; }
-          t "mario haswbstatement:P31=Q7889 haswbstatement:P400=Q172742|P400=Q183259|P400=Q184839|P400=Q182172|P400=Q8079|P400=Q56942|P400=Q186437|P400=Q203992|P400=Q188642|P400=Q170323|P400=Q203597|P400=Q10677|P400=Q10680|P400=Q10683|P400=Q170325|P400=Q188808|P400=Q132020|P400=Q48263|P400=Q209868|P400=Q10676|P400=Q200912|P400=Q184198|P400=Q751719|P400=Q206261|P400=Q1057377|P400=Q1054350"
-          t "zelda haswbstatement:P31=Q7889 haswbstatement:P400=Q122761124"
-          t "zelda haswbstatement:P31=Q7889 haswbstatement:P400=Q122761124|P400=Q19610114"
-          t "spider haswbstatement:P31=Q7889 haswbstatement:P400=Q63184502"
-          t "halo haswbstatement:P31=Q7889 haswbstatement:P400=Q98973368"
-          t "fifa haswbstatement:P31=Q7889 haswbstatement:P400=Q5014725"
+          for id in Q12395 Q54913666 Q96482598; do
+            curl -sS -G 'https://www.wikidata.org/w/api.php' -A "$UA" --data-urlencode format=json --data-urlencode action=wbgetentities --data-urlencode ids=$id --data-urlencode props=labels \
+              | jq -r ".entities.$id.labels | \"$id keys=\" + (keys|map(select(.==\"de\" or .==\"en\" or .==\"mul\"))|join(\",\")) + \" mul=\" + (.mul.value // \"-\") + \" | anzahl=\" + (length|tostring)"
+            curl -sS -G 'https://www.wikidata.org/w/api.php' -A "$UA" --data-urlencode format=json --data-urlencode action=wbgetentities --data-urlencode ids=$id --data-urlencode props=labels --data-urlencode 'languages=de|en|mul' \
+              | jq -c ".entities.$id.labels"
+          done

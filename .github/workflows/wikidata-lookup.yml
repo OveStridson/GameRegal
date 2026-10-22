@@ -1,0 +1,76 @@
+# Temporär: Wikidata-Q-IDs für die Plattformsuche ermitteln und gegenprüfen.
+name: wikidata-lookup
+on:
+  push:
+    branches: [claude/wikidata-lookup]
+jobs:
+  lookup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Lookup
+        shell: bash
+        run: |
+          API=https://www.wikidata.org/w/api.php
+          UA='GameRegal-dev/0.1 (https://github.com/OveStridson/GameRegal)'
+          get(){ curl -sS -G "$API" -A "$UA" --data-urlencode format=json "$@"; }
+
+          echo "== Q7889"
+          get --data-urlencode action=wbgetentities --data-urlencode ids=Q7889 --data-urlencode props=labels --data-urlencode languages=en | jq -r '.entities.Q7889.labels.en.value'
+
+          echo "== Plattformen: enwiki-Titel -> QID | Label | Beschreibung | Spiele mit P31=Q7889+P400"
+          while IFS='=' read -r key title; do
+            r=$(get --data-urlencode action=wbgetentities --data-urlencode sites=enwiki --data-urlencode "titles=$title" --data-urlencode props=labels\|descriptions --data-urlencode languages=en)
+            qid=$(echo "$r" | jq -r '.entities|keys[0]')
+            lab=$(echo "$r" | jq -r '.entities[]|.labels.en.value // "-"')
+            desc=$(echo "$r" | jq -r '.entities[]|.descriptions.en.value // "-"')
+            hits=-
+            if [[ $qid == Q* ]]; then
+              hits=$(get --data-urlencode action=query --data-urlencode list=search --data-urlencode srlimit=1 --data-urlencode "srsearch=haswbstatement:P31=Q7889 haswbstatement:P400=$qid" | jq -r '.query.searchinfo.totalhits')
+            fi
+            echo "$key | $title | $qid | $lab | $desc | hits=$hits"
+            sleep 0.3
+          done <<'LIST'
+          switch2=Nintendo Switch 2
+          switch=Nintendo Switch
+          ps5=PlayStation 5
+          xboxSeries=Xbox Series X and Series S
+          ps4=PlayStation 4
+          xboxOne=Xbox One
+          nes=Nintendo Entertainment System
+          snes=Super Nintendo Entertainment System
+          n64=Nintendo 64
+          gamecube=GameCube
+          wii=Wii
+          wiiu=Wii U
+          gb=Game Boy
+          gbc=Game Boy Color
+          gba=Game Boy Advance
+          ds=Nintendo DS
+          n3ds=Nintendo 3DS
+          ps1=PlayStation (console)
+          ps2=PlayStation 2
+          ps3=PlayStation 3
+          psp=PlayStation Portable
+          vita=PlayStation Vita
+          xbox=Xbox (console)
+          xbox360=Xbox 360
+          sms=Master System
+          megadrive=Sega Genesis
+          saturn=Sega Saturn
+          dreamcast=Dreamcast
+          gamegear=Game Gear
+          atari2600=Atari 2600
+          pcengine=TurboGrafx-16
+          neogeo=Neo Geo (system)
+          LIST
+
+          echo "== wbsearchentities (Top 3, mit Spiele-Treffern)"
+          for s in "Nintendo Switch 2" "Nintendo Switch" "PlayStation 5" "Xbox Series X" "Xbox Series S" "Xbox Series X and Series S" "PlayStation 4" "Xbox One" "Neo Geo" "Neo Geo AES" "Mega Drive" "PlayStation" "Xbox" "Game Gear" "PC Engine"; do
+            echo "-- $s"
+            for id in $(get --data-urlencode action=wbsearchentities --data-urlencode "search=$s" --data-urlencode language=en --data-urlencode limit=3 | jq -r '.search[].id'); do
+              d=$(get --data-urlencode action=wbgetentities --data-urlencode ids=$id --data-urlencode props=labels\|descriptions --data-urlencode languages=en | jq -r ".entities.$id|(.labels.en.value // \"-\")+\" | \"+(.descriptions.en.value // \"-\")")
+              h=$(get --data-urlencode action=query --data-urlencode list=search --data-urlencode srlimit=1 --data-urlencode "srsearch=haswbstatement:P31=Q7889 haswbstatement:P400=$id" | jq -r '.query.searchinfo.totalhits')
+              echo "   $id | $d | hits=$h"
+              sleep 0.3
+            done
+          done

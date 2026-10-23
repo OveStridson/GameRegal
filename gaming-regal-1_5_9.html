@@ -266,7 +266,8 @@ button{cursor:pointer;background:none;border:none}
 .mfoot{display:flex;justify-content:space-between;align-items:center;gap:var(--sp3);padding:var(--sp4) var(--sp5) calc(var(--sp5) + env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid rgba(38, 37, 35,.6);flex-shrink:0}
 
 /* WIZARD */
-#wizModal .mbox{max-width:560px}
+#wizModal .mbox{max-width:560px;position:relative}
+.wiz-x{position:absolute;top:var(--sp4);right:var(--sp4);z-index:2}
 .wiz-rail{height:3px;background:var(--sdyn)}
 .wiz-rail-f{height:100%;background:linear-gradient(90deg,var(--pr),var(--cy));transition:width .5s cubic-bezier(.16,1,.3,1)}
 .wstep{display:none;padding:var(--sp6) var(--sp6) var(--sp4);flex-direction:column;gap:var(--sp4);animation:sIn .35s cubic-bezier(.16,1,.3,1) both}
@@ -813,6 +814,9 @@ button{cursor:pointer;background:none;border:none}
 <div class="bkdp" id="wizModal" role="dialog" aria-modal="true">
   <div class="mbox">
     <div class="wiz-rail" style="flex-shrink:0"><div class="wiz-rail-f" id="wizRail" style="width:25%"></div></div>
+    <button type="button" class="theme-btn wiz-x" id="wClose" aria-label="Abbrechen">
+      <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14"/></svg>
+    </button>
     <div style="overflow-y:auto;flex:1">
 
     <!-- STEP 1: Titel -->
@@ -859,6 +863,7 @@ button{cursor:pointer;background:none;border:none}
             <div class="cov-opt" id="optEmoji" onclick="selCovOpt('emoji')"><div class="cov-opt-ic">😊</div><div data-i18n="cover_emoji">Emoji</div></div>
             <div class="cov-opt" id="optGrad" onclick="selCovOpt('grad')"><div class="cov-opt-ic">🎨</div><div data-i18n="cover_grad">Farbverlauf</div></div>
           </div>
+          <div id="exDoneWrap" class="ex-banner" style="display:none;margin-bottom:0" data-i18n="w_ex_done">✂️ Cover erfolgreich extrahiert</div>
           <div id="urlWrap" class="fl" style="display:none">
             <label class="lbl" data-i18n="w_cover_url_lbl">Cover URL</label>
             <input class="inp" id="covUrlInp" type="url" placeholder="https://…">
@@ -1001,7 +1006,7 @@ const I18N={
     empty:'Keine Spiele gefunden',empty_sub:'Füge dein erstes Spiel hinzu oder ändere den Filter.',
     stat_games:'Spiele',stat_active:'Aktiv',stat_done:'Fertig',stat_hours:'Stunden',
     pill_all:'Alle',pill_playing:'Aktiv',pill_completed:'Fertig',pill_backlog:'Backlog',pill_wishlist:'Wunsch',pill_dropped:'Abgebrochen',
-    sum_steam:'Steam Cover ✓',sum_url:'Eigene URL ✓',sum_grad:'Farbverlauf',
+    sum_steam:'Steam Cover ✓',sum_extract:'Extrahiertes Cover ✓',sum_url:'Eigene URL ✓',sum_grad:'Farbverlauf',
     w_sw1:'Switch-1-Titel anzeigen',
     ac_loading:'Suche läuft…',ac_offline:'Kein Internet oder API nicht erreichbar.<br>Titel manuell eingeben und Enter drücken.',ac_none:'Nichts gefunden. Titel manuell eingeben und Enter drücken.',
     d_status:'Status',d_progress:'Fortschritt',d_platform:'Plattform',d_year:'Jahr',d_hours:'Stunden gespielt',d_rating:'Bewertung',d_notes:'Notizen',d_cover:'Cover',
@@ -1010,7 +1015,7 @@ const I18N={
     btn_save:'Speichern',btn_cancel:'Abbrechen',btn_delete:'Löschen',btn_back:'Zurück',btn_done:'Fertig',btn_change:'ändern',btn_seturl:'Setzen',
     w_title:'Spieltitel',w_platform:'Plattform',w_genre:'Genre',w_cover_sub:'Wähle oder passe das Cover an',w_cover_label:'Cover Art',
     w_s1_ttl:'Welches Spiel?',w_s1_sub:'Titel eingeben — Cover & Infos werden automatisch gefunden',w_title_lbl:'Spieltitel *',w_title_ph:'z.B. Elden Ring, Slay the Spire…',
-    w_cover_url_change:'URL\nändern',w_cover_url_lbl:'Cover URL',w_emoji_lbl:'Emoji',w_emoji_own_ph:'Eigenes…',w_steam_alt:'Weiteres Cover-Format',
+    w_cover_url_change:'URL\nändern',w_ex_done:'✂️ Cover erfolgreich extrahiert',w_cover_url_lbl:'Cover URL',w_emoji_lbl:'Emoji',w_emoji_own_ph:'Eigenes…',w_steam_alt:'Weiteres Cover-Format',
     w_s3_ttl:'Wie ist dein Stand?',w_s3_sub:'Status, Fortschritt und erste Infos',w_prog_lbl:'Fortschritt %',w_hrs_lbl:'Stunden gespielt',w_notes_lbl:'Erste Notizen (optional)',w_notes_ph:'Ersteindruck…',
     w_final_ttl:'Spieltitel',w_next:'Weiter →',w_final_prompt_pre:'Drücke ',w_final_prompt_post:' um das Spiel ins Regal zu stellen! 🎉',
     gen_rpg:'RPG',gen_action:'Action',gen_strategy:'Strategie',gen_roguelike:'Roguelike',gen_shooter:'Shooter',gen_adventure:'Adventure',gen_simulation:'Simulation',gen_other:'Sonstiges',
@@ -1039,7 +1044,7 @@ const I18N={
     empty:'No games found',empty_sub:'Add your first game or change the filter.',
     stat_games:'Games',stat_active:'Playing',stat_done:'Done',stat_hours:'Hours',
     pill_all:'All',pill_playing:'Playing',pill_completed:'Done',pill_backlog:'Backlog',pill_wishlist:'Wishlist',pill_dropped:'Dropped',
-    sum_steam:'Steam cover ✓',sum_url:'Custom URL ✓',sum_grad:'Gradient',
+    sum_steam:'Steam cover ✓',sum_extract:'Extracted cover ✓',sum_url:'Custom URL ✓',sum_grad:'Gradient',
     w_sw1:'Show Switch 1 titles',
     ac_loading:'Searching…',ac_offline:'No internet or API unreachable.<br>Type the title manually and press Enter.',ac_none:'Nothing found. Type the title manually and press Enter.',
     d_status:'Status',d_progress:'Progress',d_platform:'Platform',d_year:'Year',d_hours:'Hours played',d_rating:'Rating',d_notes:'Notes',d_cover:'Cover',
@@ -1048,7 +1053,7 @@ const I18N={
     btn_save:'Save',btn_cancel:'Cancel',btn_delete:'Delete',btn_back:'Back',btn_done:'Done',btn_change:'change',btn_seturl:'Set',
     w_title:'Game title',w_platform:'Platform',w_genre:'Genre',w_cover_sub:'Choose or adjust the cover',w_cover_label:'Cover art',
     w_s1_ttl:'Which game?',w_s1_sub:'Enter a title — cover & info are found automatically',w_title_lbl:'Game title *',w_title_ph:'e.g. Elden Ring, Slay the Spire…',
-    w_cover_url_change:'Change\nURL',w_cover_url_lbl:'Cover URL',w_emoji_lbl:'Emoji',w_emoji_own_ph:'Custom…',w_steam_alt:'Other cover format',
+    w_cover_url_change:'Change\nURL',w_ex_done:'✂️ Cover extracted successfully',w_cover_url_lbl:'Cover URL',w_emoji_lbl:'Emoji',w_emoji_own_ph:'Custom…',w_steam_alt:'Other cover format',
     w_s3_ttl:'How far are you?',w_s3_sub:'Status, progress and first details',w_prog_lbl:'Progress %',w_hrs_lbl:'Hours played',w_notes_lbl:'First notes (optional)',w_notes_ph:'First impression…',
     w_final_ttl:'Game title',w_next:'Next →',w_final_prompt_pre:'Press ',w_final_prompt_post:' to put the game on the shelf! 🎉',
     gen_rpg:'RPG',gen_action:'Action',gen_strategy:'Strategy',gen_roguelike:'Roguelike',gen_shooter:'Shooter',gen_adventure:'Adventure',gen_simulation:'Simulation',gen_other:'Other',
@@ -2013,6 +2018,7 @@ document.getElementById('confirmYes').onclick=()=>{
   if(_confirmCb){_confirmCb();_confirmCb=null;}
 };
 document.getElementById('openWiz').onclick=openPicker;
+document.getElementById('wClose').onclick=closeWiz;
 document.getElementById('wizModal').addEventListener('click',e=>{if(e.target===document.getElementById('wizModal'))closeWiz()});
 
 function updateWiz(){
@@ -2053,7 +2059,7 @@ document.getElementById('wNext').onclick=()=>{
 };
 
 function buildFinal(){
-  const cover=(wd.coverMode==='steam'&&wd.steamId)?steamCover(wd.steamId):(wd.coverMode==='url'?wd.coverUrl:'');
+  const cover=(wd.coverMode==='steam'&&wd.steamId)?steamCover(wd.steamId):(wd.coverMode==='url'||wd.coverMode==='extract'?wd.coverUrl:'');
   const img=document.getElementById('finCovImg');
   const em=document.getElementById('finEm');
   if(cover){img.src=cover;img.style.display='';em.style.display='none'}
@@ -2064,7 +2070,7 @@ function buildFinal(){
     [t('d_status'),`<span style="display:inline-flex;align-items:center;gap:4px">${STATUS_ICONS[wd.status]||''}${SL[wd.status]||wd.status}</span>`],
     [t('d_progress'),wd.progress+'%'],
     wd.hours?[t('stat_hours'),wd.hours+'h']:null,
-    [t('d_cover'),wd.coverMode==='steam'&&wd.steamId?t('sum_steam'):wd.coverMode==='url'&&wd.coverUrl?t('sum_url'):wd.coverMode==='emoji'?'Emoji '+wd.emoji:t('sum_grad')],
+    [t('d_cover'),wd.coverMode==='steam'&&wd.steamId?t('sum_steam'):wd.coverMode==='extract'&&wd.coverUrl?t('sum_extract'):wd.coverMode==='url'&&wd.coverUrl?t('sum_url'):wd.coverMode==='emoji'?'Emoji '+wd.emoji:t('sum_grad')],
   ].filter(Boolean);
   document.getElementById('sumbox').innerHTML=rows.map(([k,v])=>`<div class="sumrow"><span style="font-weight:600;color:var(--tx)">${k}</span><span>${v}</span></div>`).join('');
 }
@@ -2073,7 +2079,7 @@ function addGame(){
   const g={
     id:nextId(),title:wd.title,platform:wd.platform,genre:wd.genre,year:wd.year,
     emoji:wd.emoji||'🎮',steamId:wd.steamId||null,
-    coverUrl:wd.coverMode==='url'?wd.coverUrl:'',
+    coverUrl:wd.coverMode==='url'||wd.coverMode==='extract'?wd.coverUrl:'',
     status:wd.status,progress:wd.progress,hours:wd.hours,rating:0,notes:wd.notes,added:Date.now(),
   };
   games.unshift(g);save(games);
@@ -2091,11 +2097,14 @@ function buildWizStatus(){
 /* ── COVER OPTS ── */
 function selCovOpt(mode){
   wd.coverMode=mode;
-  ['steam','url','emoji','grad'].forEach(m=>{
+  // Keine Daten-URL vom Extrahieren im URL-Feld weiterführen
+  if(mode==='url'&&wd.coverUrl.startsWith('data:')) wd.coverUrl='';
+  ['steam','extract','url','emoji','grad'].forEach(m=>{
     const el=document.getElementById('opt'+m.charAt(0).toUpperCase()+m.slice(1));
     if(el) el.classList.toggle('sel',m===mode);
   });
   document.getElementById('urlWrap').style.display=mode==='url'?'':'none';
+  document.getElementById('exDoneWrap').style.display=mode==='extract'?'':'none';
   document.getElementById('emojiWrap').style.display=mode==='emoji'?'':'none';
   document.getElementById('steamAlts').style.display=mode==='steam'&&wd.steamId?'':'none';
   updCovPreview();
@@ -2107,7 +2116,7 @@ function updCovPreview(){
   const img=document.getElementById('covImg'),ph=document.getElementById('covPh');
   let url='';
   if(wd.coverMode==='steam'&&wd.steamId) url=steamCover(wd.steamId);
-  else if(wd.coverMode==='url') url=wd.coverUrl;
+  else if(wd.coverMode==='url'||wd.coverMode==='extract') url=wd.coverUrl;
   if(url){img.src=url;img.style.display='';ph.style.display='none'}
   else{img.style.display='none';ph.style.display='';ph.textContent=wd.emoji||'🎮'}
 }
@@ -2150,10 +2159,7 @@ function openExtract(ctx){
   exCtx = ctx || {
     title:(wd.title||document.getElementById('wTitleInp').value||'').trim(),
     onSave:(dataUrl)=>{
-      wd.coverUrl=dataUrl;wd.coverMode='url';selCovOpt('url');
-      const inp=document.getElementById('covUrlInp');
-      if(inp){inp.value='';inp.placeholder='✂️ Extrahiertes Cover aktiv';}
-      updCovPreview();
+      wd.coverUrl=dataUrl;selCovOpt('extract');
     }
   };
   exGoto('A');

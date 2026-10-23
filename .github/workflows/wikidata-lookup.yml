@@ -1,19 +1,25 @@
-# Temporär: Label-Sprachen prüfen.
+# Temporär: CORS-Header der Cover-Hosts prüfen (für den Regal-Bild-Export).
 name: wikidata-lookup
 on:
   push:
     branches: [claude/wikidata-lookup]
 jobs:
-  lookup:
+  cors:
     runs-on: ubuntu-latest
     steps:
-      - name: Labels
+      - name: CORS
         shell: bash
         run: |
-          UA='GameRegal-dev/0.1 (https://github.com/OveStridson/GameRegal)'
-          for id in Q12395 Q54913666 Q96482598; do
-            curl -sS -G 'https://www.wikidata.org/w/api.php' -A "$UA" --data-urlencode format=json --data-urlencode action=wbgetentities --data-urlencode ids=$id --data-urlencode props=labels \
-              | jq -r ".entities.$id.labels | \"$id keys=\" + (keys|map(select(.==\"de\" or .==\"en\" or .==\"mul\"))|join(\",\")) + \" mul=\" + (.mul.value // \"-\") + \" | anzahl=\" + (length|tostring)"
-            curl -sS -G 'https://www.wikidata.org/w/api.php' -A "$UA" --data-urlencode format=json --data-urlencode action=wbgetentities --data-urlencode ids=$id --data-urlencode props=labels --data-urlencode 'languages=de|en|mul' \
-              | jq -c ".entities.$id.labels"
-          done
+          O='Origin: https://ovestridson.github.io'
+          chk(){ echo "== $1"; curl -sS -o /dev/null -D - -H "$O" -m 20 "$2" | grep -iE '^HTTP/|^access-control-allow-origin|^content-type|^location|^vary' || echo "   (keine Antwort)"; }
+          ART=$(curl -sS 'https://itunes.apple.com/search?term=celeste&entity=software&limit=1' | jq -r '.results[0].artworkUrl100' | sed -E 's#/[0-9]+x[0-9]+bb\.#/600x600bb.#')
+          echo "iTunes-Beispiel: $ART"
+          chk "Steam cloudflare library_600x900" "https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/library_600x900.jpg"
+          chk "Steam cloudflare library_hero" "https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/library_hero.jpg"
+          chk "Steam akamai shared" "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/library_600x900.jpg"
+          chk "iTunes mzstatic" "$ART"
+          chk "wsrv.nl -> Steam" "https://wsrv.nl/?url=$(jq -rn --arg u 'https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/library_600x900.jpg' '$u|@uri')"
+          chk "wsrv.nl -> iTunes" "https://wsrv.nl/?url=$(jq -rn --arg u "$ART" '$u|@uri')"
+          chk "Google-Logo (Beispiel ohne CORS?)" "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
+          chk "wsrv.nl -> Google-Logo" "https://wsrv.nl/?url=$(jq -rn --arg u 'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png' '$u|@uri')"
+          chk "wsrv.nl -> kaputte URL" "https://wsrv.nl/?url=https%3A%2F%2Fexample.invalid%2Fx.jpg"
